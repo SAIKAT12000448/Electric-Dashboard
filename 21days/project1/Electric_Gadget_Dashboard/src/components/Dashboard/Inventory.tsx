@@ -3,7 +3,7 @@ import { useDeleteProductMutation, useGetProductQuery } from "../../redux/api/ap
 import { IProduct } from "../../types/globalTypes";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../redux/hooks";
-import { setCategory, setPriceRange } from "../../redux/feature/products/productSlice";
+import { setCategory, setConnectivity, setOperating, setPowered, setPriceRange, setScreenSize, setStorage } from "../../redux/feature/products/productSlice";
 import { setReleaseDate } from "../../redux/feature/products/productSlice";
 import { setBrand } from "../../redux/feature/products/productSlice";
 import { setModel } from "../../redux/feature/products/productSlice";
@@ -14,8 +14,8 @@ const Inventory = () => {
   const { data: products, isLoading, isError ,refetch} = useGetProductQuery(undefined);
   const [deleteProduct, { isLoading: deleteLoading, isError: deleteError }] = useDeleteProductMutation();
   const dispatch = useDispatch();
-  const {priceRange,releaseDate,brand,model,category}  = useAppSelector((state)=>state.product);
-console.log(category);
+  const {priceRange,releaseDate,brand,model,category,operating,connectivity,powered,storage,screen}  = useAppSelector((state)=>state.product);
+console.log(connectivity);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -51,7 +51,12 @@ if (priceRange > 0 || releaseDate) {
     const  brandMatches = brand ? item.brand.toLowerCase().startsWith(brand.toLowerCase().slice(0, 2)) : true ;
     const  modelMatches = model ? item.model_number.toLowerCase().startsWith(model.toLowerCase().slice(0, 1)) : true ;
     const  categoryMatches = category ? item.category.toLowerCase()  === category.toLowerCase() : true ;
-    return meetsPriceCondition && meetsDateCondition && brandMatches && modelMatches && categoryMatches ;
+    const operatingMatches = operating ? item.operating_system.toLowerCase()===operating.toLowerCase() : true;
+    const connectivityMatches = connectivity ? item.connectivity.toLowerCase()===connectivity.toLowerCase():true;
+    const poweredMatches = powered ? item.powered===powered:true;
+    const storageMatches = storage ? item.storage ===storage : true;
+    const screenMatches = screen ? item.screen ===screen : true;
+    return meetsPriceCondition && meetsDateCondition && brandMatches && modelMatches && categoryMatches && operatingMatches && connectivityMatches && poweredMatches && storageMatches && screenMatches;
   });
 }
 const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,17 +72,32 @@ const handleModelSearch = (e: React.ChangeEvent<HTMLInputElement>)=>{
 const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>)=>{
   dispatch(setCategory(e.target.value));
 }
+const handleOperatingChange = (e: React.ChangeEvent<HTMLSelectElement>)=>{
+  dispatch(setOperating(e.target.value));
+}
+const handleConnectivityChange = (e: React.ChangeEvent<HTMLSelectElement>)=>{
+  dispatch(setConnectivity(e.target.value));
+}
+const handlePowerChange = (e: React.ChangeEvent<HTMLSelectElement>)=>{
+  dispatch(setPowered(e.target.value));
+}
+const handleStorageChange = (e: React.ChangeEvent<HTMLSelectElement>)=>{
+  dispatch(setStorage(e.target.value));
+}
+const handleScreenChange = (e: React.ChangeEvent<HTMLSelectElement>)=>{
+  dispatch(setScreenSize(e.target.value));
+}
 
   return (
     <div className="overflow-x-auto  m-5">
-<div className="grid grid-cols-4">
+<div  className="grid grid-cols-5 bg-base-200">
  <div className="p-5">
  <label className="">Price  Range : </label>
 <input
   type="range"
   min={0}
   max={1000}
-  defaultValue={'50'} 
+  defaultValue={'400'} 
   onChange={(event) => handleSlider([parseInt(event.target.value, 10)])}
   className="range range-info mt-2"
 />
@@ -113,10 +133,7 @@ const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>)=>{
       className="border rounded p-1"
     />
     </div>
-</div>
-
-<div className="grid grid-cols-5">
-  <div className="p-5 flex flex-col">
+    <div className="p-5 flex flex-col">
   <label className="mb-1 text-bold">Category:</label>
   <select name="category" id=""onChange={handleCategoryChange}>
     <option value="phone">Phone</option>
@@ -126,6 +143,62 @@ const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>)=>{
   </select>
   </div>
 </div>
+
+<div  className="grid grid-cols-5 bg-base-200">
+
+
+  <div className="p-5 flex flex-col">
+  <label className="mb-1 text-bold">Operating System:</label>
+  <select name="operating" id=""onChange={handleOperatingChange}>
+    <option value="ios">iOS</option>
+    <option value="andriod">Andriod</option>
+    <option value="windows">Windows</option>
+
+  </select>
+  </div>
+
+  <div className="p-5 flex flex-col">
+  <label className="mb-1 text-bold">Connectivity:</label>
+  <select name="connectivity" id=""onChange={handleConnectivityChange}>
+    <option value="Bluetooth">Bluetooth</option>
+    <option value="Wi-Fi">Wi-Fi</option>
+    <option value="USB-C">USB-C</option>
+
+  </select>
+  </div>
+
+  <div className="p-5 flex flex-col">
+  <label className="mb-1 text-bold">Power:</label>
+  <select name="powered" id=""onChange={handlePowerChange}>
+    <option value="battery-powered">battery-powered</option>
+    <option value="plug-in">plug-in</option>
+
+  </select>
+  </div>
+
+  <div className="p-5 flex flex-col">
+  <label className="mb-1 text-bold">Storage:</label>
+  <select name="storage" id=""onChange={handleStorageChange}>
+    <option value="4gb">4gb</option>
+    <option value="8gb">8gb</option>
+    <option value="16gb">16gb</option>
+    <option value="32gb">32gb</option>
+
+  </select>
+  </div>
+
+  <div className="p-5 flex flex-col">
+  <label className="mb-1 text-bold">Screen Size:</label>
+  <select name="storage" id=""onChange={handleScreenChange}>
+    <option value="15:6">15:6</option>
+    <option value="14:6">14:6</option>
+    <option value="4.7:9.7">4.7:9.7</option>
+
+  </select>
+  </div>
+</div>
+
+ 
 
 
 

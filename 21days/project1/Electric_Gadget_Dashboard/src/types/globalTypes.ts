@@ -10,6 +10,10 @@ export interface IProduct {
     operating_system:string,
     weight:string,
     dimensions:string,
-    image:string
+    image:string,
+    connectivity:string,
+    powered:string,
+    storage:string,
+    screen:string
  
 }

@@ -24,6 +24,11 @@ interface IProductState {
     brand: string;
     model: string;
     category: string;
+    operating:string;
+    connectivity:string;
+    powered:string;
+    storage:string;
+    screen:string;
 }
 
 const initialState: IProductState = {
@@ -34,6 +39,11 @@ const initialState: IProductState = {
     brand:'',
     model:'',
     category:'',
+    operating:'',
+    connectivity:'',
+    powered:'' ,
+    storage:'',
+    screen:'',
 }
 
 const productSlice = createSlice({
@@ -55,10 +65,25 @@ const productSlice = createSlice({
         setCategory:(state, action: PayloadAction<string>) => {
             state.category=action.payload;
         },
+        setOperating:(state, action: PayloadAction<string>) => {
+            state.operating=action.payload;
+        },
+        setConnectivity:(state, action: PayloadAction<string>) => {
+            state.connectivity=action.payload;
+        },
+        setPowered:(state, action: PayloadAction<string>) => {
+            state.powered=action.payload;
+        },
+        setStorage:(state, action: PayloadAction<string>) => {
+            state.storage=action.payload;
+        },
+        setScreenSize:(state, action: PayloadAction<string>) => {
+            state.screen=action.payload;
+        },
         
     }
 })
 
-export const { setPriceRange, setReleaseDate,setBrand,setModel,setCategory} = productSlice.actions;
+export const { setPriceRange, setReleaseDate,setBrand,setModel,setCategory,setOperating,setConnectivity,setPowered,setStorage,setScreenSize} = productSlice.actions;
 
 export default productSlice.reducer;
