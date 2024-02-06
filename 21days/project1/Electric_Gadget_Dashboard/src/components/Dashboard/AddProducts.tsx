@@ -20,6 +20,10 @@ const AddProducts = () => {
     weight: '',
     dimensions: '',
     image:'',
+    connectivity:'',
+    powered:'',
+    storage:'',
+    screen:''
   };
 
   const [productData, setProductData] = useState<IProduct>(initialProductState);

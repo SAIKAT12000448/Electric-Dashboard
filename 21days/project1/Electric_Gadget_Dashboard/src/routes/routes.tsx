@@ -7,6 +7,7 @@ import AddProducts from "../components/Dashboard/AddProducts";
 import Home from "../components/Home";
 import Inventory from "../components/Dashboard/Inventory";
 import Products from "../components/ui/Products";
+import SalesHis from "../components/Dashboard/salesHis";
 
 
 const routes = createBrowserRouter([
@@ -46,11 +47,18 @@ const routes = createBrowserRouter([
         element: <Inventory/>
        },
        {
+        path:"saleshistory",
+        element: <SalesHis/>
+       },
+       
+       {
         path:"addproduct/:id",
         element: <AddProducts/>
        },
+      
        ]
       },
+    
       {
         path: '/login',
         element: <Login />,

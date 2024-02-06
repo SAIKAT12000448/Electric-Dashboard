@@ -18,6 +18,7 @@ const Dashboard = () => {
     <ul style={{width:'230px'}} className="menu p-4  min-h-full bg-base-200 text-base-content">
       <li><Link to='/dashboard/addproduct'>Add Product</Link></li>
       <li><Link to='/dashboard/inventory'>Inventory</Link></li>
+      <li><Link to='/dashboard/saleshistory'>Sales History</Link></li>
     </ul>
   
   </div>

@@ -48,7 +48,15 @@ export const api = createApi({
 
             }),
         }),
+        addSell : builder.mutation({
+            query:(data)=>({
+                url:`/addsell`,
+                method:"POST",
+                body:data,
+
+            }),
+        }),
     }),
 });
 
-export const {useSignUpMutation,useGetUserQuery,useAddProductMutation,useGetProductQuery,useDeleteProductMutation,useGetUniqueProductQuery,useUpdateProductMutation} = api;
+export const {useSignUpMutation,useGetUserQuery,useAddProductMutation,useGetProductQuery,useDeleteProductMutation,useGetUniqueProductQuery,useUpdateProductMutation,useAddSellMutation} = api;

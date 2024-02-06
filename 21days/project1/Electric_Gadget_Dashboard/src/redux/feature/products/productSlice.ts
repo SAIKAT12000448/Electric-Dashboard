@@ -66,7 +66,7 @@ const productSlice = createSlice({
             state.category=action.payload;
         },
         setOperating:(state, action: PayloadAction<string>) => {
-            state.operating=action.payload;
+            state.operating=action.payload; 
         },
         setConnectivity:(state, action: PayloadAction<string>) => {
             state.connectivity=action.payload;

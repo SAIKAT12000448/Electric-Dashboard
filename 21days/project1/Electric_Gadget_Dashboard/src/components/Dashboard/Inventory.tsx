@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useDeleteProductMutation, useGetProductQuery } from "../../redux/api/apiSlice";
+import { useAddSellMutation, useDeleteProductMutation, useGetProductQuery } from "../../redux/api/apiSlice";
 import { IProduct } from "../../types/globalTypes";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "../../redux/hooks";
@@ -7,16 +7,31 @@ import { setCategory, setConnectivity, setOperating, setPowered, setPriceRange, 
 import { setReleaseDate } from "../../redux/feature/products/productSlice";
 import { setBrand } from "../../redux/feature/products/productSlice";
 import { setModel } from "../../redux/feature/products/productSlice";
+import { useState } from "react";
 
 
 const Inventory = () => {
 
   const { data: products, isLoading, isError ,refetch} = useGetProductQuery(undefined);
   const [deleteProduct, { isLoading: deleteLoading, isError: deleteError }] = useDeleteProductMutation();
+  const [sales, { isLoading: salesLoading, isError: salesError }] = useAddSellMutation();
   const dispatch = useDispatch();
   const {priceRange,releaseDate,brand,model,category,operating,connectivity,powered,storage,screen}  = useAppSelector((state)=>state.product);
-console.log(connectivity);
+  const today = new Date().toISOString().split('T')[0];
 
+  const [quantity, setQuantity] = useState(1);
+  const [itemQuantity,setItemQuantity] = useState(0);
+  const[id,setId] = useState('');
+  console.log(id);
+  const [buyerData,setBuyerData] = useState({
+    buyer:'',
+    quantity,
+    id,
+    
+    
+  })
+  console.log(buyerData);
+  
   if (isLoading) {
     return <div>Loading...</div>;
     
@@ -59,6 +74,60 @@ if (priceRange > 0 || releaseDate) {
     return meetsPriceCondition && meetsDateCondition && brandMatches && modelMatches && categoryMatches && operatingMatches && connectivityMatches && poweredMatches && storageMatches && screenMatches;
   });
 }
+
+const handleSell = (quan:number,product: IProduct) => {
+  setId(product._id);
+  setItemQuantity(quan);
+  setQuantity(1);
+  setBuyerData({
+    buyer: '',
+    quantity: 1,
+    id: product._id,
+  });
+};
+const handleIncrement = () => {
+  if(itemQuantity<=quantity){
+    alert('can not exceed more than availed quantity');
+  }
+  else{
+    setQuantity(quantity + 1);
+    setBuyerData((prevData) => ({ ...prevData, quantity: quantity + 1 }));
+  }
+};
+
+const handleDecrement = () => {
+  if (quantity > 0) {
+    setQuantity(quantity - 1);
+    setBuyerData((prevData) => ({ ...prevData, quantity: quantity - 1 }));
+  }
+};
+const handleChange=( e: React.ChangeEvent<HTMLInputElement>)=>{
+  const { name, value } = e.target;
+  setBuyerData({
+    ...buyerData, 
+     [name]: value
+  });
+}
+const handleDialogue=(e: React.ChangeEvent<HTMLFormElement>)=>{
+  e.preventDefault();
+  if(salesError){
+    alert('can not be sold');
+    console.log(salesError);
+  }
+  else{
+    sales(buyerData);
+    alert('Sold Successfully');
+    (document.getElementById('my_modal_1') as HTMLDialogElement).close();
+    setBuyerData({
+      buyer: '',
+      quantity: 1,
+    });
+
+  }
+
+
+}
+
 const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   dispatch(setReleaseDate(e.target.value));
 };
@@ -92,7 +161,7 @@ const handleScreenChange = (e: React.ChangeEvent<HTMLSelectElement>)=>{
     <div className="overflow-x-auto  m-5">
 <div  className="grid grid-cols-5 bg-base-200">
  <div className="p-5">
- <label className="">Price  Range : </label>
+ <label className="">Price  Range: </label>
 <input
   type="range"
   min={0}
@@ -247,6 +316,91 @@ const handleScreenChange = (e: React.ChangeEvent<HTMLSelectElement>)=>{
               <button onClick={() => handleDelete(product?._id)} className="btn btn-error btn-xs">
               {deleteLoading ? 'Deleting...' : 'Delete'}
               </button>
+              </th>
+
+              <th>
+              <button
+  className="btn btn-success btn-xs px-5"
+  onClick={() => {
+    const quantityNumber = Number(product?.product_quantity);
+
+    handleSell(quantityNumber,product);
+    setQuantity(1);
+    (document.getElementById('my_modal_1') as HTMLDialogElement).showModal();
+  }}
+>
+  Sell
+</button>
+
+<dialog id="my_modal_1" className="modal">
+  <div className="modal-box">
+    <h3 className="font-bold text-lg">Sell Product</h3>
+    <form onSubmit={handleDialogue} className="max-w-md mx-auto mt-4">
+      <div className="mb-4">
+        <label className="block text-gray-700 text-sm font-bold mb-2">
+          Buyer Name:
+        </label>
+        <input
+          type="text"
+          placeholder="Enter Buyer Name"
+          className="input input-bordered w-full"
+          name="buyer"
+          value={buyerData.buyer}
+          onChange={handleChange}
+        />
+      </div>
+
+      <div className="flex items-center mt-4">
+        <label className="block text-gray-700 text-sm font-bold mr-4">
+          Quantity:
+        </label>
+        <div className="flex items-center">
+          <button
+            type="button"
+            onClick={handleDecrement}
+            className="btn btn-outline btn-sm"
+          >
+            -
+          </button>
+         <p className="mx-3"> {quantity}</p>
+         <button
+                  type="button"
+                  className="btn btn-outline btn-sm"
+                  onClick={()=>handleIncrement()}
+                >
+                  +
+                </button>
+        </div>
+        
+
+      </div>
+      <div className="my-5">
+        <label>Date of sell:</label>
+        <input
+          type="date"
+          className="border"
+          id="calendarInput"
+          name="calendarInput"
+          value={today}  
+          onChange={handleChange}
+        />
+      </div>
+
+      <div className="modal-action">
+    
+        <button  type="submit" className="btn btn-success">Submit</button>
+
+    </div>
+   
+    </form>
+
+    <div className="modal-action">
+      <form method="dialog">
+        <button  className="btn">Close</button>
+      </form>
+    </div>
+  </div>
+</dialog>
               </th>
             </tr>
           ))}
