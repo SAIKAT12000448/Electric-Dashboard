@@ -26,15 +26,33 @@ const run = async () => {
     const db = client.db('Electric-Gadget');
     const productCollection = db.collection('products');
     const usersCollection = db.collection('users');
+    const sellingCollection = db.collection('sales');
     
     
     app.get('/products', async (req, res) => {
+      try {
+        const cursor = productCollection.find({});
+        const product = await cursor.toArray();
     
-      const cursor = productCollection.find({});
-      console.log(cursor);
-      const product = await cursor.toArray();
-
-      res.send({ status: true, data: product });
+        const ifSales = sellingCollection.find({});
+        const salesProduct = await ifSales.toArray();
+    
+        const totalSoldMap = salesProduct.reduce((acc, sale) => {
+          acc[sale.id] = (acc[sale.id] || 0) + sale.quantity;
+          return acc;
+        }, {});
+    
+        const result = product.filter((item) => {
+          const totalSold = totalSoldMap[item._id.toString()] || 0;
+          return totalSold < item.product_quantity;
+        });
+    
+        console.log(result);
+        res.send({ status: true, data: result });
+      } catch (error) {
+        console.error(error);
+        res.status(500).send({ status: false, error: 'Internal Server Error' });
+      }
     });
     
     
@@ -55,6 +73,15 @@ const run = async () => {
       const users = req.body;
       console.log(users);
       const result = await usersCollection.insertOne(users);
+
+      res.send(result);
+    });
+
+    app.post('/addsell', async (req, res) => {
+      
+      const sellingproduct = req.body;
+      console.log(sellingproduct);
+      const result = await sellingCollection.insertOne(sellingproduct);
 
       res.send(result);
     });
@@ -93,45 +120,6 @@ const run = async () => {
     });
 
 
-    
-    app.post('/comment/:id', async (req, res) => {
-      const productId = req.params.id;
-      const comment = req.body.comment;
-
-      console.log(productId);
-      console.log(comment);
-
-      const result = await productCollection.updateOne(
-        { _id: ObjectId(productId) },
-        { $push: { comments: comment } }
-      );
-
-      console.log(result);
-
-      if (result.modifiedCount !== 1) {
-        console.error('Product not found or comment not added');
-        res.json({ error: 'Product not found or comment not added' });
-        return;
-      }
-
-      console.log('Comment added successfully');
-      res.json({ message: 'Comment added successfully' });
-    });
-
-    app.get('/comment/:id', async (req, res) => {
-      const productId = req.params.id;
-
-      const result = await productCollection.findOne(
-        { _id: ObjectId(productId) },
-        { projection: { _id: 0, comments: 1 } }
-      );
-
-      if (result) {
-        res.json(result);
-      } else {
-        res.status(404).json({ error: 'Product not found' });
-      }
-    });
 
     app.post('/user', async (req, res) => {
       const user = req.body;
@@ -172,9 +160,6 @@ const run = async () => {
     });
     
   
-
-
-
 
   } finally {
   }
