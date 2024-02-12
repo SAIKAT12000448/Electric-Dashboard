@@ -55,7 +55,12 @@ const run = async () => {
       }
     });
     
-    
+    app.get('/sales',async (req,res)=>{
+      const cursor =sellingCollection.find({});
+      const result=await cursor.toArray();
+      console.log(result);
+      res.send({data:result});      
+    })
     
     app.post('/addproduct', async (req, res) => {
       
@@ -86,7 +91,7 @@ const run = async () => {
       res.send(result);
     });
 
-
+   
 
     app.get('/login', async (req, res) => {
       
