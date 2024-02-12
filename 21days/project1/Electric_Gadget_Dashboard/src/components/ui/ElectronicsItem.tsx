@@ -18,7 +18,7 @@ interface Product {
 const ElectronicsItem = () => {
     // const [electronics, setElectronics] = useState([]);
     const { data: products, isLoading, isError} = useGetProductQuery(undefined);
-console.log(isLoading,isError,);
+console.log(isLoading,isError);
 
     return (
         <div className='container mx-auto my-5 mt-8'>
