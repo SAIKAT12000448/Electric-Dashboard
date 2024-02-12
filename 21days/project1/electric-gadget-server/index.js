@@ -66,7 +66,7 @@ const run = async () => {
       
       const product = req.body;
       if (!product._id) {
-        product._id = new ObjectId(); // Generate a new ObjectId for the _id field
+        product._id = new ObjectId(); 
       }
       const result = await productCollection.insertOne(product);
 
