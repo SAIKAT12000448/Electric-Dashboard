@@ -7,7 +7,7 @@ import AddProducts from "../components/Dashboard/AddProducts";
 import Home from "../components/Home";
 import Inventory from "../components/Dashboard/Inventory";
 import Products from "../components/ui/Products";
-import SalesHis from "../components/Dashboard/salesHis";
+import SalesHis from "../components/Dashboard/SalesHis";
 
 
 const routes = createBrowserRouter([

@@ -56,7 +56,10 @@ export const api = createApi({
 
             }),
         }),
+        getSales: builder.query({
+            query:()=> "/sales",
+        })
     }),
 });
 
-export const {useSignUpMutation,useGetUserQuery,useAddProductMutation,useGetProductQuery,useDeleteProductMutation,useGetUniqueProductQuery,useUpdateProductMutation,useAddSellMutation} = api;
+export const {useSignUpMutation,useGetUserQuery,useAddProductMutation,useGetProductQuery,useDeleteProductMutation,useGetUniqueProductQuery,useUpdateProductMutation,useAddSellMutation,useGetSalesQuery} = api;

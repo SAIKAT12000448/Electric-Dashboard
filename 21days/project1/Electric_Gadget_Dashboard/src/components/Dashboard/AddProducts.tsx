@@ -186,7 +186,7 @@ const AddProducts = () => {
           />
         </div>
 
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <label htmlFor="operating_system" className="block text-gray-600 text-sm font-medium">
             Operating System:
           </label>
@@ -199,11 +199,9 @@ const AddProducts = () => {
             className="mt-1 p-2 border border-gray-300 rounded-md w-full focus:outline-none focus:border-blue-500"
             required
           />
-        </div>
-        </div>
+        </div> */}
 
-<div>
-<div className="mb-4">
+        <div className="mb-4">
           <label htmlFor="weight" className="block text-gray-600 text-sm font-medium">
           weight:
           </label>
@@ -217,7 +215,8 @@ const AddProducts = () => {
             required
           />
         </div>
-<div className="mb-4">
+
+        <div className="mb-4">
           <label htmlFor="weight" className="block text-gray-600 text-sm font-medium">
           Image Link:
           </label>
@@ -231,6 +230,75 @@ const AddProducts = () => {
             required
           />
         </div>
+        </div>
+
+<div>
+
+
+        <div className="p-5 flex flex-col">
+  <label className="mb-1 text-bold">Category:</label>
+  <select name="category" id=""onChange={handleChange}>
+    <option value="">All</option>
+    <option value="phone">Phone</option>
+    <option value="camera">camera</option>
+    <option value="laptop">Laptop</option>
+
+  </select>
+  </div>
+        <div className="p-5 flex flex-col">
+  <label className="mb-1 ">Operating System:</label>
+  <select className='border' name="operating_system" id=""onChange={handleChange}>
+  <option value="">All</option>
+    <option value="ios">iOS</option>
+    <option value="andriod">Andriod</option>
+    <option value="windows">Windows</option>
+
+  </select>
+  </div>
+
+  <div className="p-5 flex flex-col">
+  <label className="mb-1">Connectivity:</label>
+  <select className='border' name="connectivity" id=""onChange={handleChange}>
+  <option value="all">All</option>
+    <option value="Bluetooth">Bluetooth</option>
+    <option value="Wi-Fi">Wi-Fi</option>
+    <option value="USB-C">USB-C</option>
+
+  </select>
+  </div>
+
+  <div className="p-5 flex flex-col">
+  <label className="mb-1">Power:</label>
+  <select className='border' name="powered" id=""onChange={handleChange}>
+  <option value="all">All</option>
+    <option value="battery-powered">battery-powered</option>
+    <option value="plug-in">plug-in</option>
+
+  </select>
+  </div>
+
+  <div className="p-5 flex flex-col">
+  <label className="mb-1">Storage:</label>
+  <select className='border' name="storage" id=""onChange={handleChange}>
+  <option value="">All</option>
+    <option value="4gb">4gb</option>
+    <option value="8gb">8gb</option>
+    <option value="16gb">16gb</option>
+    <option value="32gb">32gb</option>
+
+  </select>
+  </div>
+
+  <div className="p-5 flex flex-col">
+  <label className="mb-1">Screen Size:</label>
+  <select className='border' name="screen" id=""onChange={handleChange}>
+  <option value="">All</option>
+    <option value="15:6">15:6</option>
+    <option value="14:6">14:6</option>
+    <option value="4.7:9.7">4.7:9.7</option>
+
+  </select>
+  </div>
 </div>
 
 

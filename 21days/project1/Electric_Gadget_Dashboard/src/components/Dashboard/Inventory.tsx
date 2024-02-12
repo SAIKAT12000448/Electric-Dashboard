@@ -14,11 +14,11 @@ const Inventory = () => {
 
   const { data: products, isLoading, isError ,refetch} = useGetProductQuery(undefined);
   const [deleteProduct, { isLoading: deleteLoading, isError: deleteError }] = useDeleteProductMutation();
-  const [sales, { isLoading: salesLoading, isError: salesError }] = useAddSellMutation();
+  const [sales, {  isError: salesError }] = useAddSellMutation();
   const dispatch = useDispatch();
   const {priceRange,releaseDate,brand,model,category,operating,connectivity,powered,storage,screen}  = useAppSelector((state)=>state.product);
   const today = new Date().toISOString().split('T')[0];
-
+  const [sellDate, setSellDate] = useState(today);
   const [quantity, setQuantity] = useState(1);
   const [itemQuantity,setItemQuantity] = useState(0);
   const[id,setId] = useState('');
@@ -27,11 +27,13 @@ const Inventory = () => {
     buyer:'',
     quantity,
     id,
+    productName:'',
     
     
   })
-  console.log(buyerData);
-  
+  console.log(category);
+ 
+
   if (isLoading) {
     return <div>Loading...</div>;
     
@@ -76,6 +78,7 @@ if (priceRange > 0 || releaseDate) {
 }
 
 const handleSell = (quan:number,product: IProduct) => {
+  // console.log(product);
   setId(product._id);
   setItemQuantity(quan);
   setQuantity(1);
@@ -83,6 +86,9 @@ const handleSell = (quan:number,product: IProduct) => {
     buyer: '',
     quantity: 1,
     id: product._id,
+    productName: product.product_name,
+  
+
   });
 };
 const handleIncrement = () => {
@@ -115,12 +121,15 @@ const handleDialogue=(e: React.ChangeEvent<HTMLFormElement>)=>{
     console.log(salesError);
   }
   else{
-    sales(buyerData);
+    sales({ ...buyerData, dateOfSell: sellDate });
     alert('Sold Successfully');
+    window.location.reload();
     (document.getElementById('my_modal_1') as HTMLDialogElement).close();
     setBuyerData({
       buyer: '',
       quantity: 1,
+      id: '',
+      productName: '',
     });
 
   }
@@ -205,6 +214,7 @@ const handleScreenChange = (e: React.ChangeEvent<HTMLSelectElement>)=>{
     <div className="p-5 flex flex-col">
   <label className="mb-1 text-bold">Category:</label>
   <select name="category" id=""onChange={handleCategoryChange}>
+    <option value="">All</option>
     <option value="phone">Phone</option>
     <option value="camera">camera</option>
     <option value="laptop">Laptop</option>
@@ -219,6 +229,7 @@ const handleScreenChange = (e: React.ChangeEvent<HTMLSelectElement>)=>{
   <div className="p-5 flex flex-col">
   <label className="mb-1 text-bold">Operating System:</label>
   <select name="operating" id=""onChange={handleOperatingChange}>
+  <option value="">All</option>
     <option value="ios">iOS</option>
     <option value="andriod">Andriod</option>
     <option value="windows">Windows</option>
@@ -229,6 +240,7 @@ const handleScreenChange = (e: React.ChangeEvent<HTMLSelectElement>)=>{
   <div className="p-5 flex flex-col">
   <label className="mb-1 text-bold">Connectivity:</label>
   <select name="connectivity" id=""onChange={handleConnectivityChange}>
+  <option value="">All</option>
     <option value="Bluetooth">Bluetooth</option>
     <option value="Wi-Fi">Wi-Fi</option>
     <option value="USB-C">USB-C</option>
@@ -239,6 +251,7 @@ const handleScreenChange = (e: React.ChangeEvent<HTMLSelectElement>)=>{
   <div className="p-5 flex flex-col">
   <label className="mb-1 text-bold">Power:</label>
   <select name="powered" id=""onChange={handlePowerChange}>
+  <option value="">All</option>
     <option value="battery-powered">battery-powered</option>
     <option value="plug-in">plug-in</option>
 
@@ -248,6 +261,7 @@ const handleScreenChange = (e: React.ChangeEvent<HTMLSelectElement>)=>{
   <div className="p-5 flex flex-col">
   <label className="mb-1 text-bold">Storage:</label>
   <select name="storage" id=""onChange={handleStorageChange}>
+  <option value="">All</option>
     <option value="4gb">4gb</option>
     <option value="8gb">8gb</option>
     <option value="16gb">16gb</option>
@@ -258,7 +272,8 @@ const handleScreenChange = (e: React.ChangeEvent<HTMLSelectElement>)=>{
 
   <div className="p-5 flex flex-col">
   <label className="mb-1 text-bold">Screen Size:</label>
-  <select name="storage" id=""onChange={handleScreenChange}>
+  <select name="screen" id=""onChange={handleScreenChange}>
+  <option value="">All</option>
     <option value="15:6">15:6</option>
     <option value="14:6">14:6</option>
     <option value="4.7:9.7">4.7:9.7</option>
@@ -381,8 +396,8 @@ const handleScreenChange = (e: React.ChangeEvent<HTMLSelectElement>)=>{
           className="border"
           id="calendarInput"
           name="calendarInput"
-          value={today}  
-          onChange={handleChange}
+          value={sellDate}  
+          onChange={(e) => setSellDate(e.target.value)}
         />
       </div>
 
