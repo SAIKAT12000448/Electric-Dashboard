@@ -5,10 +5,10 @@ const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express();
 const port = process.env.PORT || 5000;
 
-const cors = require('cors');
+// const cors = require('cors');
 
 // app.use(cors());
-app.use(cors({ origin: '*' }));
+// app.use(cors({ origin: '*' }));
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
