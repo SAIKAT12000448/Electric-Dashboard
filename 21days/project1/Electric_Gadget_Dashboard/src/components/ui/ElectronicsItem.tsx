@@ -19,7 +19,7 @@ const ElectronicsItem = () => {
     // const [electronics, setElectronics] = useState([]);
     const { data: products, isLoading, isError} = useGetProductQuery(undefined);
 console.log(isLoading,isError);
-
+console.log(products);
     return (
         <div className='container mx-auto my-5 mt-8'>
             <div className='flex justify-between mx-10'>
