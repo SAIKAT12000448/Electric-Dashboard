@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const api = createApi({
     reducerPath: 'api',
-    baseQuery:fetchBaseQuery({baseUrl:'https://electric-gadget-server-d7jrx49ts-saikat12000448.vercel.app/'}),
+    baseQuery:fetchBaseQuery({baseUrl:'https://electric-gadget-server-d7jrx49ts-saikat12000448.vercel.app'}),
     endpoints:(builder)=>({
         getUser : builder.query({
             query:()=> "/login",
