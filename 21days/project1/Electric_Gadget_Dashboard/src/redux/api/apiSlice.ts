@@ -7,7 +7,6 @@ export const api = createApi({
     // baseQuery: fetchBaseQuery({ baseUrl: 'https://electric-gadget-server-gtjiezmiz-saikat12000448.vercel.app/' }),
     baseQuery: fetchBaseQuery({
         baseUrl: 'https://electric-gadget-server.vercel.app/',
-        // credentials: 'include', // Add this line to include credentials
     }),
 
 
